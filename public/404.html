@@ -33,7 +33,7 @@
 				timeZone: "Asia/Jakarta",
 			}));
 			$("#type").removeClass("night").addClass("day");
-			if(time_hours > 18 || time_hours < 6){
+			if(time_hours >= 18 || time_hours < 6){
 				$("#type").removeClass("day").addClass("night");		
 			}
 			$("#time").html(time.toISOString());
