@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="icon" type="image/x-icon" href="./img/icon.png">
+	<link rel="stylesheet" href="./css/style.min.css">
+	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+	<title>Jerukagung Meteorologi (Live Weather)</title>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+</head>
+<body>
+	<div class="grid">
+		<div class="card--weather day" id="type">
+			<div class="bg--illustration">
+				<div class="icon"></div>
+			</div>
+			<div class="weather--indicator" >
+				<h2>
+					<span id="temp">**</span><span id="point">.**</span><span id="tempUnit" >º?</span>
+				</h2>
+				<button onclick="changeUnit()" id="unitChangeBtn">Change to º?</button>
+				<h3><i class="material-icons">&#xe94d</i> <span id="pressure">(tunggu)</span> hPa</h3>
+				<h3><i class="material-icons">&#xe798</i> <span id="humid">(tunggu)</span>% </h3>
+				<h3><i class="material-icons">&#xe923</i> <span id="time">(tunggu)</span></h3>
+				<h3><i class="material-icons">&#xe923</i> <span id="local_time">(tunggu)</span></h3>
+			</div>
+		</div>
+	</div>
+	<script type="module">
+		import { initializeApp } from "https://www.gstatic.com/firebasejs/9.9.0/firebase-app.js";
+		import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.9.0/firebase-analytics.js";
+		import { getDatabase,ref,onValue, onChildAdded} from "https://www.gstatic.com/firebasejs/9.9.0/firebase-database.js";
+
+		const Config = {
+			apiKey: "AIzaSyCnqizfZOBY3_s-JcZnSZ9Q0Xn5GdBEB8Q",
+  			authDomain: "jerukagung-meteorologi.firebaseapp.com",
+  			databaseURL: "https://jerukagung-meteorologi-default-rtdb.asia-southeast1.firebasedatabase.app",
+  			projectId: "jerukagung-meteorologi",
+  			storageBucket: "jerukagung-meteorologi.appspot.com",
+  			messagingSenderId: "359840979335",
+  			appId: "1:359840979335:web:a22c7f30ac241443899b22",
+  			measurementId: "G-H7Y4VKQQQ5"
+		};
+	  
+		// Initialize Firebase
+		const app = initializeApp(Config);
+		const analytics = getAnalytics(app);
+		var db = getDatabase(app);
+		var datas = ref(db,"data/meteorologi");
+		
+		onChildAdded(datas, (snapshot) => {
+  			var data = snapshot.val(),
+			temp = parseFloat(data.temp),
+			unit_type = localStorage.getItem("uniType");
+			localStorage.setItem("temperature",temp);
+			if(unit_type == "I"){
+				temp = fdegre(temp);
+			}else{
+				localStorage.setItem("uniType","SI");
+				temp = cdegre(temp);
+			}
+			displayTemp(temp);
+			$("#pressure").html(data.press ?? "N/A");
+			$("#humid").html(data.hum ?? "N/A");
+			clock(data.timestamp);
+		}, console.error("Gagal mengambil data"));
+		
+		function clock(unix) {
+			var time = new Date(parseInt(unix)*1000);
+			var time_hours = time.getUTCHours() + 7;
+			$("#type").removeClass("night").addClass("day");
+			if(time_hours > 18 || time_hours < 6){
+				$("#type").removeClass("day").addClass("night");		
+			}
+			$("#time").html(time.toLocaleString("en-GB", 
+			{
+				timeZone: "UTC",
+				timeStyle:"long",
+				dateStyle:"long"
+			}));
+			$("#local_time").html(time.toLocaleString("id-ID", 
+			{
+				timeZone: "Asia/Jakarta",
+				timeStyle:"long",
+				dateStyle:"long"
+			}));
+		}
+	  </script>
+	  <script>
+		function changeUnit() {
+			let unit_type = localStorage.getItem("uniType") ?? "SI",
+			temp = localStorage.getItem("temperature") ?? 23.4;
+			if(unit_type == "I"){
+				localStorage.setItem("uniType","SI");
+				temp = cdegre(temp);
+			}else{
+				localStorage.setItem("uniType","I");
+				temp = fdegre(temp);
+			}
+			displayTemp(temp);
+		}
+	
+		function displayTemp(temp){
+			var int_temp = Math.floor(temp),
+			point_temp= Math.floor((temp - int_temp) * 100);
+			$("#temp").html(int_temp ?? "N/A");
+			$("#point").html("."+point_temp ?? "");
+		}
+		function fdegre(temp) {
+			$("#unitChangeBtn").html("Change to ºC");
+			$("#tempUnit").html("ºF");
+			temp = (temp*(9/5))+32;
+			return temp;
+		}
+		function cdegre(temp) {
+			$("#unitChangeBtn").html("Change to ºF");
+			$("#tempUnit").html("ºC");
+			return temp;
+		}
+	  </script>
+</html>
