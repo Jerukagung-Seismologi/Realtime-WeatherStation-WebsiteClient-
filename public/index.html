@@ -109,6 +109,7 @@
 		function displayTemp(temp){
 			var int_temp = Math.floor(temp),
 			point_temp= Math.floor((temp - int_temp) * 100);
+			point_temp = point_temp < 10 ? "0"+ point_temp : point_temp;
 			$("#temp").html(int_temp ?? "N/A");
 			$("#point").html("."+point_temp ?? "");
 		}
