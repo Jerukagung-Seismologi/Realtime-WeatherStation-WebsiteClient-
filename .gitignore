@@ -1,4 +1,4 @@
 original_file
 .firebase
-.listing
-firebase-debug.log
+*.listing
+*.log

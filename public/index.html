@@ -5,10 +5,10 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<link rel="icon" type="image/x-icon" href="./img/icon.png">
-	<link rel="stylesheet" href="./css/style.min.css">
-	<link rel="stylesheet" href="./css/dygraph.min.css" />
-	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-	<link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+	<link type="text/css" rel="stylesheet" href="./css/style.min.css">
+	<link type="text/css" rel="stylesheet" href="./css/dygraph.min.css" />
+	<link type="text/css" href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+	<link type="text/css" href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
 	<title>Jerukagung Meteorologi (Live Weather)</title>
 </head>
 <body>
@@ -19,21 +19,20 @@
 			</div>
 			<div class="weather--indicator" >
 				<h2>
-					<span id="temp">**</span><span id="point">.**</span><span id="tempUnit" >º?</span>
+					<span id="temp">**</span><span id="point">.**</span><span id="temp-unit" >º?</span>
 				</h2>
-				<button onclick="changeUnit()" id="unitChangeBtn">Change to º?</button>
+				<button id="unit-change">Change to º?</button>
 				<h3><i class="material-icons">&#xe94d</i> <span id="pressure">(tunggu)</span> hPa</h3>
 				<h3><i class="material-icons">&#xe798</i> <span id="humid">(tunggu)</span>% </h3>
 				<h3><i class="material-icons">&#xe923</i> <span id="time">(tunggu)</span></h3>
-				<h3><i class="material-icons">&#xe923</i> <span id="local_time">(tunggu)</span></h3>
+				<h3><i class="material-icons">&#xe923</i> <span id="local-time">(tunggu)</span></h3>
 			</div>
 		</div>
 		<div class="container chart">
 			<div id="chart"></div>
 		</div>
 	</div>
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-	<script src="./js/dygraph.min.js"></script>
-	<script src="./js/general.min.js" type="module"></script>
-	<script src="./js/engine.min.js"></script>
+	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+	<script type="text/javascript" src="./js/dygraph.min.js"></script>
+	<script type="module" src="./js/general.min.js"></script>
 </html>
